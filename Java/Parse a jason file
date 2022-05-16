@@ -1,1 +1,38 @@
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Iterator;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+public class ParseJasonFile {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) throws IOException, ParseException {
+        String fileName = "api.json";
+        JSONParser parser = new JSONParser();
+        JSONObject obj = (JSONObject) parser.parse(new FileReader(fileName));
+        JSONObject query = (JSONObject)obj.get("query");
+        JSONObject nameSpaces = (JSONObject)query.get("namespaces");
+        Iterator<JSONObject> iterator = nameSpaces.values().iterator();
+        String exe = "";
+        int count = 0;
+        while (iterator.hasNext())
+        {
+            nameSpaces = iterator.next();
+            String namespace = (String) nameSpaces.get("*");
+            if(!namespace.equals(""))
+            {namespace = namespace.replaceAll(" ", "_");
+            exe =  exe + "(^" + namespace + ":)|";
+             }
+            
+        }
+        exe = exe.substring(0,exe.length()-1);
+        System.out.println(exe);
+
+    }
+    
+}
